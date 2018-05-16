@@ -14,10 +14,6 @@
 import $ from 'jquery';
 import '@/assets/gt';
 
-import( '@/assets/gt' ).then( data => {
-    console.log( 'data:', data );
-} );
-
 export default {
     name: 'HelloWorld',
     data () {

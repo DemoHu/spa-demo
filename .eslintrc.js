@@ -34,7 +34,10 @@ module.exports = {
         process: true,
         __dirname: true,
         initGeetest: true,
-        exports: true
+        exports: true,
+        describe: true,
+        it: true,
+        expect: true
     },
 
     // add your custom rules here
