@@ -4,6 +4,42 @@ import Vue from 'vue';
 import App from './App';
 import router from './router';
 
+// 组件
+import {
+    Vuetify,
+    VApp,
+    VNavigationDrawer,
+    VFooter,
+    VList,
+    VBtn,
+    VIcon,
+    VGrid,
+    VToolbar,
+    transitions,
+    VCard,
+    VProgressLinear
+} from 'vuetify';
+
+// css
+import 'vuetify/src/stylus/app.styl';
+import '../static/font/icon-google.css';
+
+Vue.use( Vuetify, {
+    components: {
+        VApp,
+        VNavigationDrawer,
+        VFooter,
+        VList,
+        VBtn,
+        VIcon,
+        VGrid,
+        VToolbar,
+        transitions,
+        VCard,
+        VProgressLinear
+    }
+} );
+
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
