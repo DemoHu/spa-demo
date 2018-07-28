@@ -3,7 +3,8 @@
         <div class="mask" v-show="action"></div>
         <v-card class="login" ref="login"
             width="450"
-            height="508">
+            height="508"
+            @keydown.enter="next">
 
             <!-- 进度条 -->
             <v-progress-linear
@@ -25,14 +26,26 @@
                 </div>
             </v-card-title>
 
-            <!-- 用户名 -->
-            <v-text-field class="user-info" ref="info"
-                v-model.trim="info"
+            <!-- 输入用户信息 -->
+            <v-text-field class="user-info name" ref="info"
+                v-show="!isPassword"
+                v-model.trim="name"
                 box
                 :color="color"
-                :label="label"
+                label="电子邮件或者电话号码"
+                :rules="emailRules"
                 autofocus
                 type="email"
+            ></v-text-field>
+            <v-text-field class="user-info password" ref="info"
+                v-if="isPassword"
+                v-model.trim="password"
+                box
+                :color="color"
+                label="请输入密码"
+                :rules="[ ...passwordRules, length( 6 ) ]"
+                autofocus
+                type="password"
             ></v-text-field>
 
             <!-- 忘记密码 -->
@@ -72,17 +85,23 @@ export default {
 
     data () {
         return {
-            info: undefined,
+            isPassword: false,
+            name: undefined,
+            password: undefined,
             label: login.email,
             action: false,
             color: 'info',
-
-            rules: {
-                email: v => ( v || '' ).match( /@/ ) || 'Please enter a valid email'
+            length: len => v => {
+                return ( v || '' ).length >= len || `${login.error[ 6 ]} ${len}`;
             },
             emailRules: [
-                v => !!v || 'E-mail is required',
-                v => /.+@.+/.test( v ) || 'E-mail must be valid'
+                v => !!v || login.error[ 0 ],
+                v => /.+@.+/.test( v ) || login.error[ 1 ]
+            ],
+            passwordRules: [
+                v => !!v || login.error[ 3 ]
+
+                // v => ( v || '' ).match( /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/ ) || login.error[ 4 ]
             ]
         };
     },
@@ -92,35 +111,42 @@ export default {
 
     methods: {
         next () {
-            this.action = true;
 
-            window.setTimeout( () => {
-                import( '../dictionary/userInfo.js' )
-                    .then( data => {
-                        let msg = document.querySelector( '.input-group__details' );
+            let msg = document.querySelector( '.input-group__details' );
+            let inp = this.$refs.info.$el.querySelector( 'input' );
 
-                        data = data.default;
-                        console.log( 'data:', data, this.info );
+            if ( this.$refs.info.valid ) {
+                this.action = true;
 
-                        if ( this.info == null ) {                  // 输入为空
-                            this.color = 'error';
-                            msg.innerHTML = login.error[ 0 ];
-                        } else if ( /.+@.+/.test( this.info ) ) {   // 输入格式正确
-                            if ( data.some( el => el.email === this.info ) ) {
-                                window.location.href = '/#/home';
-                                this.color = 'info';
+                window.setTimeout( () => {
+                    import( '../dictionary/userInfo.js' )
+                        .then( data => {
+
+                            if ( !this.isPassword ) {
+                                if ( data.default.some( el => el.email === this.name ) ) {  // 成功
+
+                                    this.isPassword = true;
+                                } else {                                                    // 用户名不存在
+
+                                    this.color = 'error';
+                                    msg.innerHTML = login.error[ 2 ];
+                                    inp.focus();
+                                }
                             } else {
-                                this.color = 'error';
-                                msg.innerHTML = login.error[ 2 ];
+                                if ( data.default.some( el => el.password === this.password ) ) {   // 成功
+                                    this.$router.push( 'home' );
+                                } else {                                                            // 密码错误
+                                    this.color = 'error';
+                                    msg.innerHTML = login.error[ 5 ];
+                                    inp.focus();
+                                }
                             }
-                        } else {                                    // 输入格式错误
-                            this.color = 'error';
-                            msg.innerHTML = login.error[ 1 ];
-                        }
-
-                        this.action = false;
-                    } );
-            }, 1000 );
+                            this.action = false;
+                        } );
+                }, 1000 );
+            } else {
+                inp.blur();
+            }
         }
     }
 };
@@ -175,7 +201,7 @@ export default {
 
     .help {
         padding-left: 16px;
-        padding: 30px 16px;
+        padding: 20px 16px;
         color: #757575;
     }
 
@@ -196,7 +222,7 @@ export default {
 
     /* 登陆后台 */
     /* .card__title {
-        padding-bottom: 0;
+        padding-bottom: 2px;
     } */
 }
 </style>
