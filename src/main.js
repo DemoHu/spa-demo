@@ -18,6 +18,7 @@ import {
     transitions,
     VCard,
     VProgressLinear,
+    VTextField,
 
     VParallax
 } from 'vuetify';
@@ -25,6 +26,7 @@ import {
 // css
 import 'vuetify/src/stylus/app.styl';
 import '../static/font/icon-google.css';
+import '../static/less/base.less';
 
 Vue.use( Vuetify, {
     components: {
@@ -39,6 +41,8 @@ Vue.use( Vuetify, {
         transitions,
         VCard,
         VProgressLinear,
+        VTextField,
+
         VParallax
     }
 } );

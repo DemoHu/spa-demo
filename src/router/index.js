@@ -4,6 +4,7 @@ import Login from '@/pages/login';
 
 import HelloWorld from '@/components/HelloWorld.vue';
 import Home from '@/pages';
+import GoogleKeep from '@/pages/GoogleKeep';
 import Parallax from '@/pages/Parallax';
 
 Vue.use( Router );
@@ -19,6 +20,11 @@ export default new Router( {
             path: '/home',
             name: 'home',
             component: Home
+        },
+        {
+            path: '/googleKeep',
+            name: 'googleKeep',
+            component: GoogleKeep
         },
         {
             path: '/parallax',
