@@ -17,7 +17,9 @@ import {
     VToolbar,
     transitions,
     VCard,
-    VProgressLinear
+    VProgressLinear,
+
+    VParallax
 } from 'vuetify';
 
 // css
@@ -36,7 +38,8 @@ Vue.use( Vuetify, {
         VToolbar,
         transitions,
         VCard,
-        VProgressLinear
+        VProgressLinear,
+        VParallax
     }
 } );
 

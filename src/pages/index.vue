@@ -2,6 +2,7 @@
     <div>
         <v-navigation-drawer
             persistent
+            :style="{ background: '#eee' }"
             :mini-variant='miniVariant'
             :clipped='clipped'
             v-model='drawer'
