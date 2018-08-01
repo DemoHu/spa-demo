@@ -58,7 +58,10 @@
             </section>
 
             <!-- 登陆验证 -->
-            <section id='captcha' v-if="isSecond"></section>
+            <!-- <transition name="fade">
+                <div id='captcha' v-if="isSecond" :style="{ height: !!isSecond * 76 + 'px' }"></div>
+            </transition> -->
+            <section id='captcha' v-if="isSecond" :style="{ height: !!isSecond * 76 + 'px' }"></section>
 
             <!-- 帮助 -->
             <section class="help">
@@ -122,6 +125,7 @@ export default {
         validate ( val ) {
             if ( val ) {
                 this.errPassword = '';
+                this.validatePassword();
             }
         },
         isSecond ( val ) {
@@ -143,6 +147,13 @@ export default {
         setErrPassword ( num ) {
             this.errPassword = login.error.password[ num ];
         },
+        validatePassword () {
+            if ( this.password == null || this.password === '' ) {
+                this.setErrPassword( 0 );
+            } else {
+                this.setErrPassword( 1 );
+            }
+        },
 
         next () {
 
@@ -150,12 +161,10 @@ export default {
                 return;
             }
 
-            let t = 1000;
-
             if ( this.isSecond ) {
                 this.nextPassword();
             } else {
-                window.setTimeout( this.nextEmail, t );
+                this.nextEmail();
             }
         },
 
@@ -198,39 +207,32 @@ export default {
 
             let inp = this.$refs.password.$el.querySelector( 'input' );
 
-            if ( this.validate ) {
-                this.action = true;
-                window.setTimeout( () => {
-                    import( '../dictionary/userInfo.js' )
-                        .then( ( data ) => {
-
-                            if ( data.default.some( el => el.password === this.password ) ) {   // 成功
-
-                                this.$router.push( 'home' );
-                            } else {                                                            // 密码错误
-
-                                this.setErrPassword( 2 );
-                                inp.focus();
-                                this.captchaReset();
-                            }
-                        } );
-                    this.action = false;
-                }, 1000 );
-                return;
-            }
-
             if ( ( this.password || '' ).length >= 6 ) {
 
-                if ( !this.validate ) {
+                if ( this.validate ) {
+                    this.action = true;
+                    window.setTimeout( () => {
+                        import( '../dictionary/userInfo.js' )
+                            .then( ( data ) => {
+
+                                if ( data.default.some( el => el.password === this.password ) ) {   // 成功
+
+                                    this.$router.push( 'home' );
+                                } else {                                                            // 密码错误
+
+                                    this.setErrPassword( 2 );
+                                    inp.focus();
+                                    this.captchaReset();
+                                }
+                            } );
+                        this.action = false;
+                    }, 1000 );
+                } else {
                     this.setErrPassword( 3 );
                 }
             } else {
 
-                if ( this.password == null || this.password === '' ) {
-                    this.setErrPassword( 0 );
-                } else {
-                    this.setErrPassword( 1 );
-                }
+                this.validatePassword();
                 inp.focus();
             }
         },
@@ -295,10 +297,10 @@ export default {
                             this.validate = false;
 
                             if ( err ) {
-                                alert( '登录失败，请完成验证' );
+                                console.log( '登录失败，请完成验证' );
                                 this.captchaReset();
                             } else {
-                                alert( '登录成功' );
+                                console.log( '登录成功' );
                             }
                         } );
                     } );
@@ -334,9 +336,11 @@ export default {
 #captcha {
     @p : 16px;
 
+    height: 0;
     padding-top: @p;
     padding-bottom: @p;
     padding-left: 16px;
+    // transition: height .3s;
 }
 
 .mask {
@@ -353,6 +357,7 @@ export default {
     position: relative;
     overflow: hidden;
     margin: auto;
+    transition: height .3s;
 
     .progress {
         .setWH( 100%, 10px );

@@ -30,6 +30,7 @@ import {
 import 'vuetify/src/stylus/app.styl';
 import '../static/less/icon-google.less';
 import '../static/less/base.less';
+import '../static/less/transition.less';
 
 Vue.use( Vuetify, {
     components: {
