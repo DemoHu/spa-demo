@@ -28,9 +28,13 @@ import {
 
 // css
 import 'vuetify/src/stylus/app.styl';
-import '../static/less/icon-google.less';
-import '../static/less/base.less';
-import '../static/less/transition.less';
+import '@/style/icon-google.less';
+import '@/style/base.less';
+import '@/style/transition.less';
+
+// js
+// import i18n from '@/test/vue-i18n';
+import i18n from '@/lang';
 
 Vue.use( Vuetify, {
     components: {
@@ -61,5 +65,6 @@ new Vue( {
     el: '#app',
     router,
     components: { App },
-    template: '<App/>'
+    template: '<App/>',
+    i18n
 } );

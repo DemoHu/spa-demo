@@ -1,3 +1,6 @@
 /dist/
 /*.js
 /test/unit/coverage
+/.vscode
+/build
+/config

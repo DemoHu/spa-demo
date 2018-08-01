@@ -20,9 +20,9 @@
 
             <!-- 登陆提示 -->
             <v-card-title>
-                <h1 class="tit">登陆后台</h1>
+                <h1 class="tit">{{ $t( 'login.signInTit' ) }}</h1>
                 <div class="txt">
-                    在您的任意设备上登录 Google 帐号，即可获取您的书签、历史记录、密码和其他设置
+                    {{ $t( 'login.signInTxt' ) }}
                 </div>
             </v-card-title>
 
@@ -31,13 +31,13 @@
                 v-show="!isSecond"
                 v-model.trim="email"
                 :color="color"
-                label="电子邮件或者电话号码"
+                :label="$t( 'login.emailOrPhone' )"
                 autofocus
                 type="email"
                 clearable
                 :error="!!errEmail"
                 :error-messages="errEmail"
-                @input.native="errEmail = ''"
+                @input.native="errorEmailNum = undefined"
                 ></v-text-field>
             <v-text-field class="user-info" ref="password"
                 v-if="isSecond"
@@ -49,12 +49,12 @@
                 clearable
                 :error="!!errPassword"
                 :error-messages="errPassword"
-                @input.native="errPassword = ''"
+                @input.native="errorPasswordNum = undefined"
                 ></v-text-field>
 
             <!-- 忘记密码 -->
             <section class="rember">
-                <v-btn class="rember-txt" flat color="info" ripple dark>忘记了电子邮件地址？</v-btn>
+                <v-btn class="rember-txt" flat color="info" ripple dark>{{ $t( 'login.forgetEmail' ) }}</v-btn>
             </section>
 
             <!-- 登陆验证 -->
@@ -65,13 +65,17 @@
 
             <!-- 帮助 -->
             <section class="help">
-                <span class="t">遇到问题?</span>
-                <v-btn class="rember-txt" flat color="info" ripple dark small ref="btn">了解详情</v-btn>
+                <span class="t">{{ $t( 'login.problem' ) }}</span>
+                <v-btn class="rember-txt" flat color="info" ripple dark small ref="btn">{{ $t( 'login.details' ) }}</v-btn>
             </section>
 
             <!-- 下一步 -->
             <v-card-actions>
-                <div class="half"><v-btn flat color="info" ripple dark>创建账号</v-btn></div>
+                <div class="half">
+                    <v-btn flat color="info" ripple dark
+                        @click="signUp"
+                        >{{ $t( 'login.signUp' ) }}</v-btn>
+                </div>
                 <div class="half">
                     <v-btn color="info" class="next" ripple dark @click.native="next">{{ msg }}</v-btn>
                 </div>
@@ -90,7 +94,7 @@ import Google from '@/components/logo/Google.vue';
 import { login } from '@/dictionary/tip';
 
 // 样式
-import '../../static/less/login.less';
+import '@/style/login.less';
 
 export default {
     name: 'login',
@@ -101,7 +105,6 @@ export default {
     data () {
         return {
             isSecond: false,
-            captchaFlag: false,
             validate: false,
             action: false,
             captchaMsg: false,
@@ -112,26 +115,69 @@ export default {
 
             label: login.email,
             color: 'info',
-            msg: login.next[ 0 ],
-            errEmail: '',
-            errPassword: ''
+            errorEmailNum: undefined,
+            errorPasswordNum: undefined
         };
+    },
+
+    created () {
     },
 
     mounted () {
     },
 
+    computed: {
+        msg () {
+            if ( this.isSecond ) {
+                return this.$t( 'login.next[ 1 ]' );
+            }
+            return this.$t( 'login.next[ 0 ]' );
+        },
+
+        errEmail () {
+            if ( typeof this.errorEmailNum === 'number' ) {
+                return this.$t( `login.error.email[ ${this.errorEmailNum} ]` );
+            }
+            return '';
+        },
+
+        errPassword () {
+            if ( typeof this.errorPasswordNum === 'number' ) {
+                return this.$t( `login.error.password[ ${this.errorPasswordNum} ]` );
+            }
+            return '';
+        }
+    },
+
     watch: {
         validate ( val ) {
             if ( val ) {
-                this.errPassword = '';
-                this.validatePassword();
+
+                let inp = this.$refs.password.$el.querySelector( 'input' );
+
+                if ( ( this.password || '' ).length >= 6 ) {
+
+                    import( '@/dictionary/userInfo.js' )
+                        .then( ( data ) => {
+
+                            if ( data.default.some( el => el.password === this.password ) ) {   // 成功
+                                this.validate = 'success';
+                                this.errorPasswordNum = undefined;
+                            } else {                                                            // 密码错误
+                                this.setErrPassword( 2 );
+                                inp.focus();
+                            }
+                        } );
+                } else {
+
+                    this.validatePassword();
+                    inp.focus();
+                }
             }
         },
         isSecond ( val ) {
             if ( val ) {
                 this.gt();
-                this.msg = login.next[ 1 ];
             }
         }
     },
@@ -142,10 +188,11 @@ export default {
             this.captchaObj.reset();
         },
         setErrEmail ( num ) {
-            this.errEmail = login.error.email[ num ];
+            this.errorEmailNum = num;
         },
         setErrPassword ( num ) {
-            this.errPassword = login.error.password[ num ];
+            this.errorPasswordNum = num;
+            this.captchaReset();
         },
         validatePassword () {
             if ( this.password == null || this.password === '' ) {
@@ -176,14 +223,12 @@ export default {
                 this.action = true;
 
                 window.setTimeout( () => {
-                    import( '../dictionary/userInfo.js' )
+                    import( '@/dictionary/userInfo.js' )
                         .then( ( data ) => {
 
                             if ( data.default.some( el => el.email === this.email ) ) {   // 成功
 
                                 this.isSecond = true;
-
-                                // this.$router.push( 'home' );
                             } else {                                                      // 账号不存在
 
                                 this.setErrEmail( 2 );
@@ -205,40 +250,29 @@ export default {
 
         nextPassword () {
 
-            let inp = this.$refs.password.$el.querySelector( 'input' );
-
-            if ( ( this.password || '' ).length >= 6 ) {
-
-                if ( this.validate ) {
-                    this.action = true;
-                    window.setTimeout( () => {
-                        import( '../dictionary/userInfo.js' )
-                            .then( ( data ) => {
-
-                                if ( data.default.some( el => el.password === this.password ) ) {   // 成功
-
-                                    this.$router.push( 'home' );
-                                } else {                                                            // 密码错误
-
-                                    this.setErrPassword( 2 );
-                                    inp.focus();
-                                    this.captchaReset();
-                                }
-                            } );
-                        this.action = false;
-                    }, 1000 );
-                } else {
-                    this.setErrPassword( 3 );
-                }
-            } else {
-
-                this.validatePassword();
-                inp.focus();
+            // 先验证
+            if ( 'success' !== this.validate ) {
+                return this.setErrPassword( 3 );
             }
+
+            // 验证成功跳转
+            this.action = true;
+            window.setTimeout( () => {
+                this.$router.push( 'home' );
+            }, 1000 );
         },
 
+        /**
+         * 创建账号
+         */
+        signUp () {
+            this.$i18n.locale = ( this.$i18n.locale === 'zh' ? 'en' : 'zh' );
+        },
+
+        /**
+         * 极客验证初始化时机
+         */
         gt () {
-            this.captchaFlag = true;
 
             if ( process.env.NODE_ENV !== 'production' ) {
                 $.get( '/gt/register-click' ).done( data => this._initGeetest( data ) );
@@ -249,6 +283,9 @@ export default {
             }
         },
 
+        /**
+         * 极客验证实例完成
+         */
         gtDemo ( captchaObj ) {
             this.captchaObj = captchaObj;
             captchaObj.appendTo( '#captcha' );
@@ -260,7 +297,7 @@ export default {
                 let result = captchaObj.getValidate();
 
                 if ( !result ) {
-                    return alert( '请完成验证' );
+                    return this.setErrPassword( 3 );
                 }
 
                 if ( process.env.NODE_ENV !== 'production' ) {
@@ -282,8 +319,7 @@ export default {
                                 // 验证成功
                                 this.validate = true;
                             } else if ( data.status === 'fail' ) {
-                                console.log( '登录失败，请完成验证' );
-                                this.captchaReset();
+                                this.setErrPassword( 3 );
                             }
                         }.bind( this )
                     } );
@@ -308,6 +344,9 @@ export default {
             } );
         },
 
+        /**
+         * 极客验证初始化
+         */
         _initGeetest ( data ) {
 
             initGeetest( {
@@ -327,8 +366,8 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import url("../../static/less/mixins.less");
-@import url("../../static/less/params.less");
+@import url("../../style/mixins.less");
+@import url("../../style/params.less");
 
 #wait {
     text-align: center;
@@ -357,7 +396,7 @@ export default {
     position: relative;
     overflow: hidden;
     margin: auto;
-    transition: height .3s;
+    // transition: height .1s;
 
     .progress {
         .setWH( 100%, 10px );
@@ -371,6 +410,7 @@ export default {
     .tit {
         font-weight: normal;
         font-size: 24px;
+        width: 100%;
     }
 
     .txt {
@@ -388,7 +428,7 @@ export default {
     }
 
     .help {
-        padding: 20px 16px;
+        padding: 20px 0 20px 8px;
         color: #757575;
         -webkit-box-align: center;
         -ms-flex-align: center;
@@ -464,10 +504,5 @@ export default {
         height: auto;
         font-size: 15px;
     }
-
-    /* 登陆后台 */
-    /* .card__title {
-        padding-bottom: 2px;
-    } */
 }
 </style>
