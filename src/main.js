@@ -20,12 +20,15 @@ import {
     VProgressLinear,
     VTextField,
 
-    VParallax
+    VParallax,
+    VDivider,
+    VSubheader,
+    VTooltip
 } from 'vuetify';
 
 // css
 import 'vuetify/src/stylus/app.styl';
-import '../static/font/icon-google.css';
+import '../static/less/icon-google.less';
 import '../static/less/base.less';
 
 Vue.use( Vuetify, {
@@ -43,7 +46,10 @@ Vue.use( Vuetify, {
         VProgressLinear,
         VTextField,
 
-        VParallax
+        VParallax,
+        VDivider,
+        VSubheader,
+        VTooltip
     }
 } );
 
