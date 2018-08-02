@@ -1,4 +1,4 @@
-import { apiLoginByUser } from '@/api/login';
+import { apiVerifyUserInfo } from '@/api/login';
 import { getToken, setToken } from '../../utils/token';
 
 const user = {
@@ -44,7 +44,7 @@ const user = {
             const userName = userInfo.userName.trim();
 
             return new Promise( ( resolve, reject ) => {
-                apiLoginByUser( userName, userInfo.password )
+                apiVerifyUserInfo( userName, userInfo.password )
                     .then( response => {
 
                         // 使用本地数据 import() 导入, 所以使用的是 default 字段

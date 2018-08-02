@@ -123,6 +123,8 @@ export default {
     },
 
     created () {
+        this.validate = false;
+        this.captchaObj = null;
     },
 
     mounted () {
@@ -132,20 +134,20 @@ export default {
     },
 
     computed: {
+
+        // 国际化
         msg () {
             if ( this.isSecond ) {
                 return this.$t( 'login.next[ 1 ]' );
             }
             return this.$t( 'login.next[ 0 ]' );
         },
-
         errEmail () {
             if ( typeof this.errorEmailNum === 'number' ) {
                 return this.$t( `login.error.email[ ${this.errorEmailNum} ]` );
             }
             return '';
         },
-
         errPassword () {
             if ( typeof this.errorPasswordNum === 'number' ) {
                 return this.$t( `login.error.password[ ${this.errorPasswordNum} ]` );
@@ -158,8 +160,8 @@ export default {
         validate ( val ) {
             if ( true === val ) {
 
-                // 用户名验证
-                this.loginByUserInfo();
+                // 用户信息验证
+                this.verifyUserInfo();
             }
         },
         isSecond ( val ) {
@@ -210,19 +212,7 @@ export default {
                 this.action = true;
 
                 window.setTimeout( () => {
-                    import( '@/mork/userInfo' )
-                        .then( ( data ) => {
-
-                            if ( data.default.some( el => el.email === this.email ) ) {   // 成功
-
-                                this.isSecond = true;
-                            } else {                                                      // 账号不存在
-
-                                this.setErrEmail( 2 );
-                                inp.focus();
-                            }
-                            this.action = false;
-                        } );
+                    this.verifyUserEmail( inp );
                 }, 1000 );
             } else {
 
@@ -242,9 +232,15 @@ export default {
                 return this.setErrPassword( 3 );
             }
 
-            // 验证成功跳转
+            // 登录成功
+            // 应该需要调用接口登录, 这里省略
             this.action = true;
             window.setTimeout( () => {
+
+                // 设置 Cookies, 有效期半天
+                // this.$store.commit( 'SET_TOKEN', this.$store.state.user.name, .5 );
+
+                // 成功跳转
                 this.$router.push( 'home' );
             }, 1000 );
         },

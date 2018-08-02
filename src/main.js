@@ -4,6 +4,7 @@ import Vue from 'vue';
 import App from './App';
 import router from './router';
 import store from '@/store';
+import axios from 'axios';
 
 // 组件
 import {
@@ -37,6 +38,8 @@ import '@/style/transition.less';
 // js
 // import i18n from '@/test/vue-i18n';
 import i18n from '@/lang';
+
+Vue.prototype.$axios = axios;
 
 Vue.use( Vuetify, {
     components: {

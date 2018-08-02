@@ -17,7 +17,15 @@ export default {
         // 单位是 天
         setToken( 'admin', .5 );
 
-        console.log( 'this:', this.$store );
+        console.log( 'this:', this );
+        console.log( '$store:', this.$store );
+        console.log( '$axios:', this.$axios );
+
+        this.$axios.get( '/mork/userInfo.json' ).then( data => {
+            console.log( 'data:', data );
+        } );
+
+        // $axios.all, $axios.get, $axios.post
     }
 };
 </script>

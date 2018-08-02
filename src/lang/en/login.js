@@ -14,7 +14,7 @@ let error = {
     ]
 };
 
-let next = [
+const next = [
     'next',
     'sign in'
 ];

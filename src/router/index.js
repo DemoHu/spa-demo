@@ -5,7 +5,7 @@ import URLS from './_important_dev';
 
 Vue.use( Router );
 
-let routes = URLS.split( ' ' ).map( el => ( {
+const routes = URLS.split( ' ' ).map( el => ( {
     path: `/${el}`,
     name: el,
     component ( resolve ) {

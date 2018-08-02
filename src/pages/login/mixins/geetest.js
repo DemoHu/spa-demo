@@ -11,7 +11,7 @@ export default {
             if ( process.env.NODE_ENV !== 'production' ) {
                 $.get( '/gt/register-click' ).done( data => this._initGeetest( data ) );
             } else {
-                import( '../../service/static/click' ).then( click => {
+                import( 'service/static/click' ).then( click => {
                     click.register( null, ( err, data ) => this._initGeetest( data ) );
                 } );
             }
@@ -58,7 +58,7 @@ export default {
                         }.bind( this )
                     } );
                 } else {
-                    import( '../../service/static/click' ).then( click => {
+                    import( 'service/static/click' ).then( click => {
                         click.validate( false, {
                             geetest_challenge: result.geetest_challenge,
                             geetest_validate: result.geetest_validate,

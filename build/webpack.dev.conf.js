@@ -68,6 +68,15 @@ const devWebpackConfig = merge( baseWebpackConfig, {
                 to: config.dev.assetsSubDirectory,
                 ignore: [ '.*' ]
             }
+        ] ),
+
+        // copy mork
+        new CopyWebpackPlugin( [
+            {
+                from: path.resolve( __dirname, '../src/mork' ),
+                to: 'mork',
+                ignore: [ '.*' ]
+            }
         ] )
     ]
 } );

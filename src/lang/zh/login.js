@@ -1,4 +1,4 @@
-let error = {
+const error = {
     email: [
         '电子邮件地址不能为空',
         '请输入正确的电子邮件',
@@ -12,7 +12,7 @@ let error = {
     ]
 };
 
-let next = [
+const next = [
     '下一步',
     '登录'
 ];
