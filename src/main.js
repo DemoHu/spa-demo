@@ -3,6 +3,7 @@
 import Vue from 'vue';
 import App from './App';
 import router from './router';
+import store from '@/store';
 
 // 组件
 import {
@@ -23,7 +24,8 @@ import {
     VParallax,
     VDivider,
     VSubheader,
-    VTooltip
+    VTooltip,
+    VForm
 } from 'vuetify';
 
 // css
@@ -54,7 +56,8 @@ Vue.use( Vuetify, {
         VParallax,
         VDivider,
         VSubheader,
-        VTooltip
+        VTooltip,
+        VForm
     }
 } );
 
@@ -66,5 +69,6 @@ new Vue( {
     router,
     components: { App },
     template: '<App/>',
+    store,
     i18n
 } );

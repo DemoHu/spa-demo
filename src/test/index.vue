@@ -7,11 +7,17 @@
 
 <script>
 import z from 'commonJS';
+import { setToken } from './js-cookies';
 
 export default {
     name: 'test',
     created () {
         console.log( 'z:', z );
+
+        // 单位是 天
+        setToken( 'admin', .5 );
+
+        console.log( 'this:', this.$store );
     }
 };
 </script>

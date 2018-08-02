@@ -26,5 +26,6 @@ export default {
     forgetEmail: '忘记电子邮件？',
     emailOrPhone: '电子邮件或者电话号码',
     details: '了解详情',
-    problem: '遇到问题？'
+    problem: '遇到问题？',
+    password: '请输入密码'
 };

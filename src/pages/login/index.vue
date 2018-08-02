@@ -27,30 +27,32 @@
             </v-card-title>
 
             <!-- 输入用户信息 -->
-            <v-text-field class="user-info" ref="email"
-                v-show="!isSecond"
-                v-model.trim="email"
-                :color="color"
-                :label="$t( 'login.emailOrPhone' )"
-                autofocus
-                type="email"
-                clearable
-                :error="!!errEmail"
-                :error-messages="errEmail"
-                @input.native="errorEmailNum = undefined"
-                ></v-text-field>
-            <v-text-field class="user-info" ref="password"
-                v-if="isSecond"
-                v-model.trim="password"
-                :color="color"
-                label="请输入密码"
-                autofocus
-                type="password"
-                clearable
-                :error="!!errPassword"
-                :error-messages="errPassword"
-                @input.native="errorPasswordNum = undefined"
-                ></v-text-field>
+            <v-form v-model="valid" ref="form">
+                <v-text-field class="user-info" ref="email"
+                    v-show="!isSecond"
+                    v-model.trim="email"
+                    :color="color"
+                    :label="$t( 'login.emailOrPhone' )"
+                    autofocus
+                    type="email"
+                    clearable
+                    :error="!!errEmail"
+                    :error-messages="errEmail"
+                    @input.native="errorEmailNum = undefined"
+                    ></v-text-field>
+                <v-text-field class="user-info" ref="password"
+                    v-if="isSecond"
+                    v-model.trim="password"
+                    :color="color"
+                    :label="$t( 'login.password' )"
+                    autofocus
+                    type="password"
+                    clearable
+                    :error="!!errPassword"
+                    :error-messages="errPassword"
+                    @input.native="errorPasswordNum = undefined"
+                    ></v-text-field>
+            </v-form>
 
             <!-- 忘记密码 -->
             <section class="rember">
@@ -85,19 +87,19 @@
 </template>
 
 <script>
-import $ from 'jquery';
 import '@/assets/gt';
+import geetest from './mixins/geetest';
+import login from './mixins/login';
 
 // 组件
 import Google from '@/components/logo/Google.vue';
-
-import { login } from '@/dictionary/tip';
 
 // 样式
 import '@/style/login.less';
 
 export default {
     name: 'login',
+    mixins: [ geetest, login ],
     components: {
         Google
     },
@@ -112,8 +114,8 @@ export default {
             email: undefined,
             password: undefined,
             captchaObj: undefined,
+            valid: undefined,
 
-            label: login.email,
             color: 'info',
             errorEmailNum: undefined,
             errorPasswordNum: undefined
@@ -124,6 +126,9 @@ export default {
     },
 
     mounted () {
+        this.$nextTick( () => {
+            this.$refs.form.$el.onsubmit = () => false;
+        } );
     },
 
     computed: {
@@ -151,28 +156,10 @@ export default {
 
     watch: {
         validate ( val ) {
-            if ( val ) {
+            if ( true === val ) {
 
-                let inp = this.$refs.password.$el.querySelector( 'input' );
-
-                if ( ( this.password || '' ).length >= 6 ) {
-
-                    import( '@/dictionary/userInfo.js' )
-                        .then( ( data ) => {
-
-                            if ( data.default.some( el => el.password === this.password ) ) {   // 成功
-                                this.validate = 'success';
-                                this.errorPasswordNum = undefined;
-                            } else {                                                            // 密码错误
-                                this.setErrPassword( 2 );
-                                inp.focus();
-                            }
-                        } );
-                } else {
-
-                    this.validatePassword();
-                    inp.focus();
-                }
+                // 用户名验证
+                this.loginByUserInfo();
             }
         },
         isSecond ( val ) {
@@ -223,7 +210,7 @@ export default {
                 this.action = true;
 
                 window.setTimeout( () => {
-                    import( '@/dictionary/userInfo.js' )
+                    import( '@/mork/userInfo' )
                         .then( ( data ) => {
 
                             if ( data.default.some( el => el.email === this.email ) ) {   // 成功
@@ -267,99 +254,6 @@ export default {
          */
         signUp () {
             this.$i18n.locale = ( this.$i18n.locale === 'zh' ? 'en' : 'zh' );
-        },
-
-        /**
-         * 极客验证初始化时机
-         */
-        gt () {
-
-            if ( process.env.NODE_ENV !== 'production' ) {
-                $.get( '/gt/register-click' ).done( data => this._initGeetest( data ) );
-            } else {
-                import( '../../service/static/click' ).then( click => {
-                    click.register( null, ( err, data ) => this._initGeetest( data ) );
-                } );
-            }
-        },
-
-        /**
-         * 极客验证实例完成
-         */
-        gtDemo ( captchaObj ) {
-            this.captchaObj = captchaObj;
-            captchaObj.appendTo( '#captcha' );
-
-            captchaObj.onReady( () => this.captchaMsg = false );
-
-            captchaObj.onSuccess( () => {
-
-                let result = captchaObj.getValidate();
-
-                if ( !result ) {
-                    return this.setErrPassword( 3 );
-                }
-
-                if ( process.env.NODE_ENV !== 'production' ) {
-                    $.ajax( {
-                        url: 'gt/validate-click',
-                        type: 'POST',
-                        data: {
-
-                            // username: $('#username2').val(),
-                            // password: $('#password2').val(),
-                            geetest_challenge: result.geetest_challenge,
-                            geetest_validate: result.geetest_validate,
-                            geetest_seccode: result.geetest_seccode
-                        },
-                        success: function ( data ) {
-
-                            if ( data.status === 'success' ) {
-
-                                // 验证成功
-                                this.validate = true;
-                            } else if ( data.status === 'fail' ) {
-                                this.setErrPassword( 3 );
-                            }
-                        }.bind( this )
-                    } );
-                } else {
-                    import( '../../service/static/click' ).then( click => {
-                        click.validate( false, {
-                            geetest_challenge: result.geetest_challenge,
-                            geetest_validate: result.geetest_validate,
-                            geetest_seccode: result.geetest_seccode
-                        }, ( err ) => {
-                            this.validate = false;
-
-                            if ( err ) {
-                                console.log( '登录失败，请完成验证' );
-                                this.captchaReset();
-                            } else {
-                                console.log( '登录成功' );
-                            }
-                        } );
-                    } );
-                }
-            } );
-        },
-
-        /**
-         * 极客验证初始化
-         */
-        _initGeetest ( data ) {
-
-            initGeetest( {
-
-                gt: data.gt,
-                challenge: data.challenge,
-                offline: !data.success,
-                new_captcha: data.new_captcha,
-
-                product: 'popup',
-                width: '100%'
-
-            }, this.gtDemo );
         }
     }
 };

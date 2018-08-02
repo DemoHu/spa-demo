@@ -33,5 +33,6 @@ export default {
     forgetEmail: 'Forget email?',
     emailOrPhone: 'Email or cell phone number',
     details: 'Find out the details',
-    problem: 'Have problem?'
+    problem: 'Have problem?',
+    password: 'Pleas enter password'
 };

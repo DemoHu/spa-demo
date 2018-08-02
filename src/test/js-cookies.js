@@ -7,6 +7,8 @@ export function getToken () {
 }
 
 export function setToken ( token, expires = 7 ) {
+
+    // Cookies.set('name', 'value', { expires: 365 });
     return Cookies.set( TokenKey, token, expires == null ? undefined : { expires } );
 }
 

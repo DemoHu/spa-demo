@@ -1,4 +1,4 @@
-- [ ] 请求
+- [ ] 请求  axios
 - [x] 国际化 vue-i18n
-- [ ] cookies token
+- [x] cookies token
 
