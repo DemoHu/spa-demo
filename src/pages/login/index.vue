@@ -1,10 +1,15 @@
 <template>
-    <v-app>
+    <div>
         <div class="mask" v-show="action"></div>
+
         <v-card class="login" ref="login"
             width="450"
-            :height="508 + !!isSecond * 76"
             @keydown.enter="next">
+
+            <!-- tip -->
+            <v-alert class="alert" :value="true" type="info">
+                email: 11@11&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;password: 111111
+            </v-alert>
 
             <!-- 进度条 -->
             <v-progress-linear
@@ -82,26 +87,31 @@
                     <v-btn color="info" class="next" ripple dark @click.native="next">{{ msg }}</v-btn>
                 </div>
             </v-card-actions>
+
+            <Foot></Foot>
         </v-card>
-    </v-app>
+    </div>
 </template>
 
 <script>
 import '@/assets/gt';
 import geetest from './mixins/geetest';
 import login from './mixins/login';
+import mixins from '@/utils/mixins';
 
 // 组件
 import Google from '@/components/logo/Google.vue';
+import Foot from './components/foot';
 
 // 样式
 import '@/style/login.less';
 
 export default {
     name: 'login',
-    mixins: [ geetest, login ],
+    mixins: [ geetest, login, mixins ],
     components: {
-        Google
+        Google,
+        Foot
     },
 
     data () {
@@ -125,6 +135,9 @@ export default {
     created () {
         this.validate = false;
         this.captchaObj = null;
+
+        // 判断用户是否登录
+        this.isLogin();
     },
 
     mounted () {
@@ -179,9 +192,11 @@ export default {
         setErrEmail ( num ) {
             this.errorEmailNum = num;
         },
-        setErrPassword ( num ) {
+        setErrPassword ( num, flag ) {
             this.errorPasswordNum = num;
-            this.captchaReset();
+            if ( !flag ) {
+                this.captchaReset();
+            }
         },
         validatePassword () {
             if ( this.password == null || this.password === '' ) {
@@ -229,19 +244,37 @@ export default {
 
             // 先验证
             if ( 'success' !== this.validate ) {
-                return this.setErrPassword( 3 );
+                return this.setErrPassword( 3, true );
             }
 
-            // 登录成功
-            // 应该需要调用接口登录, 这里省略
             this.action = true;
             window.setTimeout( () => {
+                this.$store.dispatch( 'LoginByUser', {
+                    email: this.email,
+                    password: this.password
+                } ).then( response => {
 
-                // 设置 Cookies, 有效期半天
-                // this.$store.commit( 'SET_TOKEN', this.$store.state.user.name, .5 );
+                    if ( 1 === response.code ) {    // 登录成功
+                        let { data } = response;
 
-                // 成功跳转
-                this.$router.push( 'home' );
+                        // 设置 cookies
+                        this.$store.commit( 'SET_TOKEN', {
+                            name: data.name,
+                            expires: .5
+                        } );
+
+                        console.log( '登录成功:', data );
+
+                        // 获取用户信息
+                        this.setInfo( data );
+
+                        // 成功跳转
+                        this.$router.push( { name: 'home' } );
+                    }
+                } ).catch( err => {
+                    console.log( '登录失败!', err.code );
+                } );
+
             }, 1000 );
         },
 
@@ -249,7 +282,7 @@ export default {
          * 创建账号
          */
         signUp () {
-            this.$i18n.locale = ( this.$i18n.locale === 'zh' ? 'en' : 'zh' );
+
         }
     }
 };
@@ -284,9 +317,19 @@ export default {
     border-radius: @login-radius;
     padding: @login-padding;
     position: relative;
-    overflow: hidden;
+    // overflow: hidden;
     margin: auto;
     // transition: height .1s;
+
+    .alert {
+        width: 100%;
+        position: absolute;
+        left: 0;
+        top: -100px;
+        border-style: none;
+        border-top-left-radius: initial!important;
+        border-top-right-radius: initial!important;
+    }
 
     .progress {
         .setWH( 100%, 10px );
@@ -395,4 +438,5 @@ export default {
         font-size: 15px;
     }
 }
+
 </style>

@@ -34,5 +34,6 @@ export default {
     emailOrPhone: 'Email or cell phone number',
     details: 'Find out the details',
     problem: 'Have problem?',
-    password: 'Pleas enter password'
+    password: 'Pleas enter password',
+    lang: 'English'
 };

@@ -7,7 +7,8 @@ import zh from './zh';
 Vue.use( VueI18n );
 
 const messages = {
-    en, zh
+    en,
+    zh
 };
 
 let i18n = new VueI18n( {

@@ -31,29 +31,28 @@ const user = {
         SET_AVATAR ( state, avatar ) {
             state.avatar = avatar;
         },
-        SET_TOKEN ( state, token ) {
-            setToken( token );
-            state.token = token;
+        SET_TOKEN ( state, data ) {
+            setToken( data.name, data.expires );
+            state.token = data.name;
         }
     },
 
     actions: {
 
         // 用户名登录
-        LoginByUser ( { commit }, userInfo ) {
-            const userName = userInfo.userName.trim();
+        LoginByUser ( store, { email, password } ) {
 
-            return new Promise( ( resolve, reject ) => {
-                apiVerifyUserInfo( userName, userInfo.password )
-                    .then( response => {
-
-                        // 使用本地数据 import() 导入, 所以使用的是 default 字段
-                        const data = response.default;
-                        commit( 'SET_TOKEN', data.token );
-                        resolve( data );
-                    } )
-                    .catch( err => reject( err ) );
-            } );
+            // 本地模拟, 直接使用验证用户信息的接口
+            return apiVerifyUserInfo( email, password )
+                .then( response => {
+                    console.log( '登录成功:', response.data );
+                    if ( 1 === response.code ) {    // 登录成功
+                        return response;
+                    }
+                } ).catch( err => {
+                    console.log( '登录失败!', err.code );
+                    return err;
+                } );
         }
     }
 };

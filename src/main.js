@@ -26,7 +26,10 @@ import {
     VDivider,
     VSubheader,
     VTooltip,
-    VForm
+    VForm,
+    VAvatar,
+    VAlert,
+    VMenu
 } from 'vuetify';
 
 // css
@@ -34,6 +37,7 @@ import 'vuetify/src/stylus/app.styl';
 import '@/style/icon-google.less';
 import '@/style/base.less';
 import '@/style/transition.less';
+import '@/assets/animate.css';
 
 // js
 // import i18n from '@/test/vue-i18n';
@@ -60,7 +64,10 @@ Vue.use( Vuetify, {
         VDivider,
         VSubheader,
         VTooltip,
-        VForm
+        VForm,
+        VAvatar,
+        VAlert,
+        VMenu
     }
 } );
 

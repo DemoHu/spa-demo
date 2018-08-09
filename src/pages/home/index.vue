@@ -1,5 +1,5 @@
 <template>
-    <v-app id='inspire'>
+    <div>
         <v-navigation-drawer
             v-model='drawer'
             fixed
@@ -39,7 +39,7 @@
                     <v-list-tile
                         v-else
                         :key='i'
-                        @click='xx'>
+                        @click='ngs( item, i )'>
 
                         <v-list-tile-action>
                             <v-icon>{{ item.icon }}</v-icon>
@@ -65,13 +65,44 @@
                 prepend-inner-icon='search'
             ></v-text-field>
             <v-spacer></v-spacer>
+
+            <div class="avatar">
+                <v-menu offset-y>
+                    <v-btn fab flat small round
+                        slot="activator"
+                        color="primary"
+                    >
+                        <v-avatar size="38" color="white">
+                            <img :src="$store.state.user.avatar"
+                                :alt="$store.state.user.name">
+                        </v-avatar>
+                    </v-btn>
+                    <v-list>
+                        <v-list-tile
+                            v-for="item in 2"
+                            :key="item"
+                            >
+                        <v-list-tile-title>{{ item }}</v-list-tile-title>
+                        </v-list-tile>
+                    </v-list>
+                </v-menu>
+                <v-icon class="arrow" size="16">play_arrow</v-icon>
+            </div>
+
         </v-toolbar>
 
-        <v-content>
+        <v-content class="wh">
             <v-container fluid fill-height class='grey lighten-4'>
-                <v-layout justify-center align-center>
-                    <v-flex shrink>
-                        <v-tooltip right>
+                <router-view class="wh"></router-view>
+                <!-- <v-layout justify-center align-center> -->
+                <!-- <v-layout align-center> -->
+
+                    <!-- <v-flex shrink> -->
+                    <!-- <v-flex> -->
+
+                        <!-- <router-view></router-view> -->
+
+                        <!-- <v-tooltip right>
                             <v-btn
                                 slot='activator'
                                 :href='source'
@@ -93,24 +124,27 @@
                                 <v-icon large>mdi-codepen</v-icon>
                             </v-btn>
                             <span>Codepen</span>
-                        </v-tooltip>
-                    </v-flex>
-                </v-layout>
+                        </v-tooltip> -->
+                    <!-- </v-flex> -->
+                <!-- </v-layout> -->
             </v-container>`
         </v-content>
-    </v-app>
+    </div>
 </template>
 
 <script>
+import mixins from '@/utils/mixins';
+
 export default {
-    props: {
-        source: String
-    },
+    name: 'home',
+    mixins: [ mixins ],
     data: () => ( {
+
         drawer: null,
         items: [
-            { icon: 'lightbulb_outline', text: 'Notes' },
-            { icon: 'touch_app', text: 'Reminders' },
+            { icon: 'dashboard', text: 'dashboard' },
+
+            // { icon: 'touch_app', text: 'Reminders' },
             { divider: true },
             { heading: 'Labels' },
             { icon: 'add', text: 'Create new label' },
@@ -127,21 +161,22 @@ export default {
     } ),
 
     created () {
-        console.log( 'token:', this.$store.state.user );
-        if ( this.$store.state.user.token == null ) {
-            this.$router.push( 'login' );
-        }
+
+        this.isLogin();
     },
 
     methods: {
-        xx () {
-            console.log( 'xxx:' );
+        ngs ( item, index ) {
+            console.log( 'ngs:', item, index );
+            this.$router.push( { name: 'dashboard' } );
         }
     }
 };
 </script>
 
 <style scoped lang='less'>
+@import url("../../style/mixins.less");
+
 #keep main .container {
     height: 660px;
 }
@@ -151,4 +186,17 @@ export default {
 .text {
     font-weight: 400;
 }
+
+.avatar {
+    position: relative;
+}
+
+.arrow {
+    // margin-left: 10px;
+    transform: rotate(90deg);
+    position: absolute;
+    bottom: 5px;
+    right: -8px;
+}
+
 </style>

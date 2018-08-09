@@ -27,5 +27,6 @@ export default {
     emailOrPhone: '电子邮件或者电话号码',
     details: '了解详情',
     problem: '遇到问题？',
-    password: '请输入密码'
+    password: '请输入密码',
+    lang: '简体中文'
 };

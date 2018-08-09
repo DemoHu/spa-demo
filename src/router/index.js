@@ -2,6 +2,7 @@ import Vue from 'vue';
 
 import Router from 'vue-router';
 import URLS from './_important_dev';
+import home from './home.js';
 
 Vue.use( Router );
 
@@ -17,7 +18,8 @@ export default new Router( {
     routes: [
         {
             path: '/',
-            redirect: '/home'
+            redirect: '/home',
+            name: 'home'
         }, {
             path: '/test',
             name: 'test',
@@ -26,6 +28,7 @@ export default new Router( {
             }
         },
 
+        home,
         ...routes
     ]
 } );
