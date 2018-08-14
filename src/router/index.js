@@ -1,12 +1,11 @@
 import Vue from 'vue';
 
 import Router from 'vue-router';
-import URLS from './_important_dev';
 import home from './home.js';
 
 Vue.use( Router );
 
-const routes = URLS.split( ' ' ).map( el => ( {
+const routes = 'login hello parallax'.split( ' ' ).map( el => ( {
     path: `/${el}`,
     name: el,
     component ( resolve ) {

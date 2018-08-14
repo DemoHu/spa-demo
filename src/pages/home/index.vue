@@ -9,7 +9,8 @@
 
             <v-list
                 dense
-                class='grey lighten-4'>
+                class='grey lighten-4'
+                :style="{ paddingTop: '10px' }">
 
                 <template v-for='(item, i) in items'>
 
@@ -36,7 +37,7 @@
                         class='my-3'
                     ></v-divider>
 
-                    <v-list-tile
+                    <v-list-tile p2
                         v-else
                         :key='i'
                         @click='ngs( item, i )'>
@@ -68,11 +69,11 @@
 
             <div class="avatar">
                 <v-menu offset-y>
-                    <v-btn fab flat small round
+                    <v-btn fab flat small round disabled
                         slot="activator"
                         color="primary"
                     >
-                        <v-avatar size="38" color="white">
+                        <v-avatar size="38">
                             <img :src="$store.state.user.avatar"
                                 :alt="$store.state.user.name">
                         </v-avatar>
@@ -82,11 +83,18 @@
                             v-for="item in 2"
                             :key="item"
                             >
-                        <v-list-tile-title>{{ item }}</v-list-tile-title>
+                            <v-list-tile-title>{{ item }}</v-list-tile-title>
+                        </v-list-tile>
+                        <v-divider></v-divider>
+                        <v-list-tile
+                            v-for="item in 1"
+                            :key="item"
+                            >
+                            <v-list-tile-title>{{ item }}</v-list-tile-title>
                         </v-list-tile>
                     </v-list>
                 </v-menu>
-                <v-icon class="arrow" size="16">play_arrow</v-icon>
+                <!-- <v-icon class="arrow" size="16">play_arrow</v-icon> -->
             </div>
 
         </v-toolbar>
@@ -94,39 +102,6 @@
         <v-content class="wh">
             <v-container fluid fill-height class='grey lighten-4'>
                 <router-view class="wh"></router-view>
-                <!-- <v-layout justify-center align-center> -->
-                <!-- <v-layout align-center> -->
-
-                    <!-- <v-flex shrink> -->
-                    <!-- <v-flex> -->
-
-                        <!-- <router-view></router-view> -->
-
-                        <!-- <v-tooltip right>
-                            <v-btn
-                                slot='activator'
-                                :href='source'
-                                icon
-                                large
-                                target='_blank'>
-
-                                <v-icon large>code</v-icon>
-                            </v-btn>
-                        <span>Source</span>
-                        </v-tooltip>
-                        <v-tooltip right>
-                            <v-btn slot='activator'
-                                icon
-                                large
-                                href='https://codepen.io/johnjleider/pen/jZQNbd'
-                                target='_blank'>
-
-                                <v-icon large>mdi-codepen</v-icon>
-                            </v-btn>
-                            <span>Codepen</span>
-                        </v-tooltip> -->
-                    <!-- </v-flex> -->
-                <!-- </v-layout> -->
             </v-container>`
         </v-content>
     </div>
@@ -134,6 +109,7 @@
 
 <script>
 import mixins from '@/utils/mixins';
+import '@/style/home.less';
 
 export default {
     name: 'home',
@@ -142,21 +118,21 @@ export default {
 
         drawer: null,
         items: [
-            { icon: 'dashboard', text: 'dashboard' },
+            { icon: 'dashboard', text: 'dashboard' }
 
             // { icon: 'touch_app', text: 'Reminders' },
-            { divider: true },
-            { heading: 'Labels' },
-            { icon: 'add', text: 'Create new label' },
-            { divider: true },
-            { icon: 'archive', text: 'Archive' },
-            { icon: 'delete', text: 'Trash' },
-            { divider: true },
-            { icon: 'settings', text: 'Settings' },
-            { icon: 'chat_bubble', text: 'Trash' },
-            { icon: 'help', text: 'Help' },
-            { icon: 'phonelink', text: 'App downloads' },
-            { icon: 'keyboard', text: 'Keyboard shortcuts' }
+            // { divider: true },
+            // { heading: 'Labels' },
+            // { icon: 'add', text: 'Create new label' },
+            // { divider: true },
+            // { icon: 'archive', text: 'Archive' },
+            // { icon: 'delete', text: 'Trash' },
+            // { divider: true },
+            // { icon: 'settings', text: 'Settings' },
+            // { icon: 'chat_bubble', text: 'Trash' },
+            // { icon: 'help', text: 'Help' },
+            // { icon: 'phonelink', text: 'App downloads' },
+            // { icon: 'keyboard', text: 'Keyboard shortcuts' }
         ]
     } ),
 
@@ -176,16 +152,6 @@ export default {
 
 <style scoped lang='less'>
 @import url("../../style/mixins.less");
-
-#keep main .container {
-    height: 660px;
-}
-.v-navigation-drawer__border {
-    display: none;
-}
-.text {
-    font-weight: 400;
-}
 
 .avatar {
     position: relative;

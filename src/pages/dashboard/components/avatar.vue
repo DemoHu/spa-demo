@@ -2,14 +2,14 @@
     <div class="avatar-container">
         <v-card>
             <v-card-media class="img"
-                src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+                src="/static/images/bg.png"
                 height="200px"
                 >
             </v-card-media>
 
             <v-card-actions class="actions">
 
-                <v-avatar class="avatar" size="70" color="white">
+                <v-avatar class="avatar" size="55" color="white">
                     <!-- class="animated bounce"  -->
                     <img :class="[ 'avator', {
                         animated: hover,
@@ -27,28 +27,25 @@
                 </v-btn>
             </v-card-actions>
 
-            <div class="progress">
+            <div :class="[ 'progress', { b: !show } ]">
                 <div v-for="(item, index) in progressList" :key="index">
-                    <v-slide-y-transition>
-                        <span class="label" v-show="show">{{ item.title }}</span>
-                    </v-slide-y-transition>
-                    <v-slide-y-transition>
-                        <v-progress-linear v-show="show" v-model="item.value"
+                    <span class="label" v-show="show">{{ item.title }}</span>
+                    <v-progress-linear v-show="show" v-model="item.value"
                             :color="item.value === 100 ? 'success' : 'info'"></v-progress-linear>
-                    </v-slide-y-transition>
                     <div class="check" v-show="show">
-                        <v-slide-y-transition><span v-if="item.value !== 100">{{ `${item.value}%` }}</span></v-slide-y-transition>
-                        <v-slide-y-transition>
-                            <v-icon color="success" v-if="item.value === 100">check_circle</v-icon>
-                        </v-slide-y-transition>
+                        <span v-if="item.value !== 100">{{ `${item.value}%` }}</span>
+                        <v-icon color="success" v-if="item.value === 100">check_circle</v-icon>
                     </div>
                 </div>
             </div>
 
         </v-card>
+
+        <div id="xx"></div>
     </div>
 </template>
 <script>
+
 export default {
     name: 'avator',
     data () {
@@ -57,15 +54,22 @@ export default {
             hover: false,
 
             progressList: [
-                { title: 'CSS', value: 24 },
-                { title: 'JavaScript', value: 50 },
-                { title: 'Vue', value: 100 }
+                { title: 'CSS', value: 0 },
+                { title: 'JavaScript', value: 0 },
+                { title: 'Vue', value: 0 }
             ]
         };
     },
 
     mounted () {
-        console.log( 'user:', this.$store.state.user.avatar );
+
+        this.$nextTick( () => {
+            window.setTimeout( () => {
+                this.progressList[ 0 ].value = 24;
+                this.progressList[ 1 ].value = 50;
+                this.progressList[ 2 ].value = 100;
+            }, 200 );
+        } );
     },
 
     methods: {
@@ -75,6 +79,8 @@ export default {
 
 <style lang="less">
 @import url("../../../style/mixins.less");
+
+@p: 20px;
 
 /* 图片缩放 */
 .img {
@@ -90,12 +96,12 @@ export default {
 /* 头像设置 */
 .actions {
     position: relative;
-    padding: 20px;
+    padding: @p/2;
 
     .avatar {
         position: absolute;
         top: 0;
-        left: 20px;
+        left: @p;
         transform: translateY(-50%);
         border: 5px solid #fff;
         box-sizing: content-box;
@@ -103,12 +109,11 @@ export default {
 }
 
 .avatar-container {
-    padding: 20px;
+    padding: @p;
 }
 
 .progress {
-    padding: 20px;
-    padding-top: 0;
+    padding: 0 @p @p @p;
 
     .v-progress-linear {
         border-radius: 3.5px;
@@ -117,16 +122,19 @@ export default {
 
     > div {
         position: relative;
-        padding: 0 50px 0 20px;
+        padding: 0 @p+20px 0 @p;
 
         .check {
             .setWH( 24px );
             position: absolute;
-            right: 20px;
+            right: @p;
             bottom: 3.5px;
             transform: translateY(50%) translateX(50%);
         }
     }
+}
+.progress.b {
+    padding-bottom: 0;
 }
 
 </style>
