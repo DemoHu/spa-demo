@@ -342,7 +342,8 @@ export default {
         top: 0;
         left: 0;
         margin: 0;
-        border-radius: 0;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
     }
 
     .tit {

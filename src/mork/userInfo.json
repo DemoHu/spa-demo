@@ -6,7 +6,7 @@
         "email": "11@112",
         "phone": "11111111111",
         "status": "1",
-        "avatar": "/static/images/avator.png",
+        "avatar": "./static/images/avator.png",
         "token": ""
     },
     {
@@ -16,7 +16,7 @@
         "email": "11@11",
         "phone": "11111111111",
         "status": "1",
-        "avatar": "/static/images/avatar.jpg",
+        "avatar": "./static/images/avatar.jpg",
         "token": ""
     }
 ]

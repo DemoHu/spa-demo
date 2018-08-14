@@ -82,59 +82,61 @@ export default {
 
 @p: 20px;
 
-/* 图片缩放 */
-.img {
-    &:hover .v-card__media__background {
-        transform: scale(1.1);
-    }
-
-    .v-card__media__background {
-        transition: transform 1s;
-    }
-}
-
-/* 头像设置 */
-.actions {
-    position: relative;
-    padding: @p/2;
-
-    .avatar {
-        position: absolute;
-        top: 0;
-        left: @p;
-        transform: translateY(-50%);
-        border: 5px solid #fff;
-        box-sizing: content-box;
-    }
-}
-
 .avatar-container {
-    padding: @p;
-}
+    /* 图片缩放 */
+    .img {
+        &:hover .v-card__media__background {
+            transform: scale(1.1);
+        }
 
-.progress {
-    padding: 0 @p @p @p;
-
-    .v-progress-linear {
-        border-radius: 3.5px;
-        position: relative;
-    }
-
-    > div {
-        position: relative;
-        padding: 0 @p+20px 0 @p;
-
-        .check {
-            .setWH( 24px );
-            position: absolute;
-            right: @p;
-            bottom: 3.5px;
-            transform: translateY(50%) translateX(50%);
+        .v-card__media__background {
+            transition: transform 1s;
         }
     }
-}
-.progress.b {
-    padding-bottom: 0;
+
+    /* 头像设置 */
+    .actions {
+        position: relative;
+        padding: @p/2;
+
+        .avatar {
+            position: absolute;
+            top: 0;
+            left: @p;
+            transform: translateY(-50%);
+            border: 5px solid #fff;
+            box-sizing: content-box;
+        }
+    }
+
+    .avatar-container {
+        padding: @p;
+    }
+
+    .progress {
+        padding: 0 @p @p @p;
+
+        .v-progress-linear {
+            border-radius: 3.5px;
+            position: relative;
+        }
+
+        > div {
+            position: relative;
+            padding: 0 @p+20px 0 @p;
+
+            .check {
+                .setWH( 24px );
+                position: absolute;
+                right: @p;
+                bottom: 3.5px;
+                transform: translateY(50%) translateX(50%);
+            }
+        }
+    }
+    .progress.b {
+        padding-bottom: 0;
+    }
 }
 
 </style>
