@@ -249,6 +249,7 @@ export default {
 
             this.action = true;
             window.setTimeout( () => {
+                console.log( 'aslkfjalskfjasl;fjka;lskfjsdfasfd`:' );
                 this.$store.dispatch( 'LoginByUser', {
                     email: this.email,
                     password: this.password
@@ -272,6 +273,8 @@ export default {
                         this.$router.push( { name: 'home' } );
                     }
                 } ).catch( err => {
+                    this.action = false;
+                    this.captchaReset();
                     console.log( '登录失败!', err.code );
                 } );
 

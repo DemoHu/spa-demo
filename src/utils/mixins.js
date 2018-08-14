@@ -3,6 +3,15 @@ import { getToken } from '@/utils/token';
 export default {
     methods: {
 
+        setInfo ( data ) {
+            this.$store.commit( 'SET_NAME', data.name );
+            this.$store.commit( 'SET_ID', data.id );
+            this.$store.commit( 'SET_EMAIL', data.email );
+            this.$store.commit( 'SET_PHONE', data.phone );
+            this.$store.commit( 'SET_STATUS', data.status );
+            this.$store.commit( 'SET_AVATAR', data.avatar );
+        },
+
         /**
          * 判断用户是否已经登录, 模拟用
          */
@@ -17,12 +26,7 @@ export default {
                         let { data } = response;
 
                         // 获取用户信息
-                        this.$store.commit( 'SET_NAME', data.name );
-                        this.$store.commit( 'SET_ID', data.id );
-                        this.$store.commit( 'SET_EMAIL', data.email );
-                        this.$store.commit( 'SET_PHONE', data.phone );
-                        this.$store.commit( 'SET_STATUS', data.status );
-                        this.$store.commit( 'SET_AVATAR', data.avatar );
+                        this.setInfo( data );
 
                         // 成功跳转
                         this.$router.push( { name: 'home' } );

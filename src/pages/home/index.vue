@@ -88,7 +88,7 @@
                         <v-divider></v-divider>
                         <v-list-tile
                             v-for="(item, index) in 2"
-                            :key="index"
+                            :key="index + 100"
                             >
                             <v-list-tile-title>{{ index }}</v-list-tile-title>
                         </v-list-tile>
