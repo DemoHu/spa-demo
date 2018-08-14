@@ -1,5 +1,6 @@
 # spa-demo
 > 使用到的技术
+
 - [x] Vue
 
 - [x] vuex
@@ -15,6 +16,8 @@
 - [x] vue-i18n
 
 - [x] vue-router
+
+- [x] 极客验证
 
 
 

@@ -34,7 +34,7 @@ import {
 
 // css
 import 'vuetify/src/stylus/app.styl';
-import '@/style/icon-google.less';
+import '@s/font/icon-google.css';
 import '@/style/base.less';
 import '@/style/transition.less';
 import '@/assets/animate.css';
