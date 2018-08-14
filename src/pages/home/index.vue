@@ -80,17 +80,17 @@
                     </v-btn>
                     <v-list>
                         <v-list-tile
-                            v-for="item in 2"
-                            :key="item"
+                            v-for="(item, index) in 2"
+                            :key="index"
                             >
                             <v-list-tile-title>{{ item }}</v-list-tile-title>
                         </v-list-tile>
                         <v-divider></v-divider>
                         <v-list-tile
-                            v-for="item in 1"
-                            :key="item"
+                            v-for="(item, index) in 2"
+                            :key="index"
                             >
-                            <v-list-tile-title>{{ item }}</v-list-tile-title>
+                            <v-list-tile-title>{{ index }}</v-list-tile-title>
                         </v-list-tile>
                     </v-list>
                 </v-menu>

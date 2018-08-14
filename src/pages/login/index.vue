@@ -317,6 +317,8 @@ export default {
     border-radius: @login-radius;
     padding: @login-padding;
     position: relative;
+    top: 50%;
+    transform: translateY(-50%);
     // overflow: hidden;
     margin: auto;
     // transition: height .1s;

@@ -30,6 +30,8 @@ export default {
                 } ).catch( err => {
                     console.log( '登录失效, 请重新登录!', err.code );
                 } );
+            } else {
+                this.$router.push( { name: 'login' } );
             }
         }
     }
