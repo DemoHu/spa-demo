@@ -83,6 +83,8 @@ export default {
 @p: 20px;
 
 .avatar-container {
+    padding: @p;
+
     /* 图片缩放 */
     .img {
         &:hover .v-card__media__background {
@@ -107,10 +109,6 @@ export default {
             border: 5px solid #fff;
             box-sizing: content-box;
         }
-    }
-
-    .avatar-container {
-        padding: @p;
     }
 
     .progress {

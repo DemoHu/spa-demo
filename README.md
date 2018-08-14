@@ -1,6 +1,30 @@
 # spa-demo
+> 使用到的技术
+- [x] Vue
 
-> A spa demo project.
+- [x] vuex
+
+- [x] axios
+
+- [x] less
+
+- [x] vuetify
+
+- [x] js-cookies
+
+- [x] vue-i18n
+
+- [x] vue-router
+
+  
+
+# 预览
+![](.\doc\devPic\login_01.png)
+
+![](.\doc\devPic\login_02.png)
+
+![](.\doc\devPic\home_01.png)
+
 
 ## Build Setup
 
