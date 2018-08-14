@@ -16,14 +16,14 @@
 
 - [x] vue-router
 
-  
+
 
 # 预览
-![](.\doc\devPic\login_01.png)
+![](./doc/devPic/login_01.png)
 
-![](.\doc\devPic\login_02.png)
+![](./doc/devPic/login_02.png)
 
-![](.\doc\devPic\home_01.png)
+![](./doc/devPic/home_01.png)
 
 
 ## Build Setup
