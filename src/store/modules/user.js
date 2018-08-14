@@ -50,8 +50,7 @@ const user = {
                         return response;
                     }
                 } ).catch( err => {
-                    console.log( '登录失败!', err.code );
-                    return err;
+                    throw new Error( `登录失败: ${err.code}` );
                 } );
         }
     }

@@ -187,7 +187,11 @@ export default {
     methods: {
         captchaReset () {
             this.validate = false;
-            this.captchaObj.reset();
+            try {
+                this.captchaObj.reset();
+            } catch ( err ) {
+
+            }
         },
         setErrEmail ( num ) {
             this.errorEmailNum = num;
@@ -249,7 +253,6 @@ export default {
 
             this.action = true;
             window.setTimeout( () => {
-                console.log( 'aslkfjalskfjasl;fjka;lskfjsdfasfd`:' );
                 this.$store.dispatch( 'LoginByUser', {
                     email: this.email,
                     password: this.password
@@ -271,11 +274,15 @@ export default {
 
                         // 成功跳转
                         this.$router.push( { name: 'home' } );
+                    } else {
+                        this.action = false;
+                        this.captchaReset();
                     }
                 } ).catch( err => {
                     this.action = false;
                     this.captchaReset();
-                    console.log( '登录失败!', err.code );
+                    console.log( 'err:', err );
+                    throw new Error( `登录失败: ${err.code}` );
                 } );
 
             }, 1000 );

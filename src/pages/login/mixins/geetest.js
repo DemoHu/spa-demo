@@ -70,6 +70,11 @@ export default {
                                 console.log( '登录失败，请完成验证' );
                                 this.captchaReset();
                             } else {
+
+                                // 打包后默认成功
+                                if ( process.env.NODE_ENV === 'production' ) {
+                                    this.validate = true;
+                                }
                                 console.log( '登录成功' );
                             }
                         } );
