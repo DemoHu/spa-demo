@@ -21,7 +21,7 @@
     }
 
 /* eslint-disable no-unused-vars */
-} )( typeof window !== 'undefined' ? window : this, function ( window, noGlobal ) {
+} )( typeof window !== 'undefined' ? window : {}, function ( window, noGlobal ) {
     'use strict';
     if ( typeof window === 'undefined' ) {
         throw new Error( 'Geetest requires browser environment' );

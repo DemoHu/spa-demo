@@ -1,5 +1,10 @@
 import Vue from 'vue';
 import Login from '@/pages/login';
+import i18n from '@/lang';
+console.log( { i18n } );
+Vue.use( {
+    install: i18n
+} );
 
 describe( 'Login.vue', () => {
     const Constructor = Vue.extend( Login );
